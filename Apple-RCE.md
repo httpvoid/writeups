@@ -65,7 +65,7 @@ This will take a query parameter `file` and create it this way `{temp-directory}
 
 You should already see it, to do a path traversal we need a directory `__` to exist as Linux requires a path to exist before doing a traversal. But, luckily for us, `expandPath` creates the path if it doesn't exist and returns the path as string. So passing file=/../../../context/pwn.cfm will create the directory `__` and traverse to the context directory within webroot thus giving us an ezz RCE here.
 
-However, Even when the bug is legit, ***we can't exploit this in case of Apple because of WAF*** blocking the `../` in query parameter and this endpoint especially asks the `file` paraemter to be a query parameter (`url.file` & `form.imgSrc`). If both were form/post parameter we won't trigger WAF. **We could still use this endpoint to create files with our controlled name and content in a certain directory without triggering WAF.**  
+However, Even when the bug is legit, ***we can't exploit this in case of Apple because of WAF*** blocking the `../` in query parameter and this endpoint especially asks the `file` parameter to be a query parameter (`url.file` & `form.imgSrc`). If both were form/post parameter we won't trigger WAF. **We could still use this endpoint to create files with our controlled name and content in a certain directory without triggering WAF.**  
 
 ## What now? Something that won't trigger WAF?
 
