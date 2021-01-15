@@ -264,6 +264,8 @@ Apple prompty fixed the issue but requested us to not disclose the issue before 
 
 On the other hand we and Apple were also talking with Lucee, Lucee team has also fixed the bug by restricting access to cfm files directly, here's the [commit link](https://github.com/lucee/Lucee/commit/6208ab7c44c61d26c79e0b0af10382899f57e1ca). We're still awaiting on CVE allocation tho.
 
+Huge shoutout to Apple Product Security Team for being transparent & allowing the disclosure of this writeup!
+
 If you have any questions, ping us at [@rootxharsh](https://twitter.com/rootxharsh) & [@iamnoooob](https://twitter.com/iamnoooob). 
 
 Thanks for reading, Have a great year ahead!
