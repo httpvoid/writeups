@@ -1,7 +1,7 @@
 # Finding 0day to hack Apple
 
 ### Getting started
-We started hacking on Apple after the [infamous blog](https://samcurry.net/hacking-apple/) by Sam, et al. The goal was to focus on critical findings such as PII exposure or getting access to Apple's servers/internal network. These are the types of bugs we thought Apple would be most interested in.
+We started hacking on Apple after the [infamous blog post](https://samcurry.net/hacking-apple/) by Sam, et al. The goal was to focus on critical findings such as PII exposure or getting access to Apple's servers/internal network. These are the types of bugs we thought Apple would be most interested in.
 
 ### Reconnaissance and fingerprinting
 
@@ -21,15 +21,15 @@ To exploit the vulnerabilities that we'll discuss below, we need to understand t
 
 Apple has a very painful WAF. It blocks almost any attempted Path-traversal/SQLi via URL (query params). 
 
-The frontend server (reverse proxy) at facilities.apple.com is configured to only show responses from the backend server with 200 and 404 status codes. If you get any other status code on the backend, the frontend server will serve a 403, which is the same response as when the WAF Is triggered.
+The frontend server (reverse proxy) at facilities.apple.com is configured to only show responses from the backend server with status codes of 200 and 404. If you get any other status code on the backend, the frontend server will instead serve a 403, which is the same response as when the WAF is triggered.
 
 ### Lucee Misconfiguration
 
 While testing out Lucee locally, we came across a critical misconfiguration which allowed an attacker to access authenticated CFM (ColdFusion) files directly. This allowed us to perform a lot of authenticated actions while being completely unauthenticated. 
 
-Within the CFM files, as soon as you hit the `request.admintype` variable/propery the execution flow will stop as we're not authenticated as admin. However, any code before reaching that check executes. So we had to find files that had some sort of bug before we hit `request.admintype`.
+As soon as you hit the `request.admintype` variable/property in a CFM file, the execution flow will stop as we're not authenticated as admin. However, any code before that check executes. So we had to find files that had some sort of bug before they hit `request.admintype`.
 
-We'll make use of these three files to gain a complete pre-auth/unauth RCE on a Lucee installation:
+We made use of these three files to gain a complete pre-auth/unauth RCE on a Lucee installation:
 
 - imgProcess.cfm (not available in older versions)
 - admin.search.index.cfm
@@ -39,15 +39,15 @@ We'll make use of these three files to gain a complete pre-auth/unauth RCE on a 
 
 ### Sweet & Simple RCE in imgProcess.cfm 
 
-To replicate Apple's installation, we got a local copy of Lucee running with the same version. Opening the file without any parameters gave us an exception on our installation. Opening the file on Apple's servers gave us a 403 which means that the file exists. We just needed to specify the right parameter/values, otherwise the backend server would raise an exception for which the frontend server would serve a 403.
+To replicate Apple's installation, we got a local copy of Lucee running with the same version. Opening `imgProcess.cfm` without any parameters gave us an exception on our installation. Opening it on Apple's servers gave us a 403 which meant that the file exists. We just needed to specify the right parameters/values; otherwise the backend server would raise an exception for which the frontend server would serve a 403.
 
-Giving wrong parameters - 
+Wrong parameters - 
 
-![403 Because of exception on backend](screenshots/Screenshot_59.png)
+![403 because of exception on backend](screenshots/Screenshot_59.png)
 
-Giving right parameters -
+Right parameters -
 
-![200 Because of exception on backend](screenshots/Screenshot_58.png)
+![200 because no exception on backend](screenshots/Screenshot_58.png)
 
 
 This file had a path traversal vulnerability to create a file anywhere on the server with our given content. 
@@ -61,11 +61,11 @@ This file had a path traversal vulnerability to create a file anywhere on the se
 </cfoutput> 
 ```
 
-This takes a query parameter `file` and creates it with this line: `{temp-directory}/admin-ext-thumbnails/__{our-input}`. Our input can be defined via post parameter `imgSrc`. 
+This takes a query parameter `file` and creates it as a file with this line: `{temp-directory}/admin-ext-thumbnails/__{our-input}`. Our input can be defined via post parameter `imgSrc`. 
 
-As you can already see, to do a path traversal we need the `__` directory to exist as Linux requires a path to exist before doing a traversal. Luckily for us, `expandPath` creates the path if it doesn't exist and returns the path as a string. So, passing `file=/../../../context/pwn.cfm` will create the directory `__` and traverse to the context directory within webroot thus giving us an ezz RCE here.
+As you can see already, the `__` directory must exist before doing a path traversal as Linux requires a path to exist before doing a traversal. Luckily for us, `expandPath` creates the path if it doesn't exist and returns the path as a string. So, passing `file=/../../../context/pwn.cfm` will create the `__` directory and traverse to the context directory within webroot thus giving us an ezz RCE here.
 
-However, even with this bug, ***we can't exploit this in Apple's case because the WAF*** blocks the `../` in query parameter. This endpoint specifically asks the `file` parameter to be a query parameter (`url.file`, but `form.imgSrc`). If both were form or post parameters we wouldn't trigger the WAF. **We could still use this endpoint to create files with a name and content that we control in a certain directory without triggering the WAF.**  
+However, even with this bug, ***we can't exploit it in Apple's case because the WAF*** blocks the `../` in query parameters. This endpoint specifically asks the `file` parameter to be a query parameter (`url.file`, but `form.imgSrc`). If both were form or post parameters, we wouldn't trigger the WAF. **We could still use this endpoint to create files with a name and content that we control in a certain directory without triggering the WAF.**  
 
 ## What now? How can we avoid triggering the WAF?
 
@@ -78,7 +78,7 @@ This endpoint takes two parameters:
 - dataDir
 - luceeArchiveZipPath
 
-`dataDir` is the path where you want to copy the files specified via the `luceeArchiveZipPath` parameter. If the path doesn't exist, it will be created. We can pass an absolute path here.
+`dataDir` is the path where you want to copy the files to that are specified via the `luceeArchiveZipPath` parameter. If the path doesn't exist, it will be created. We can pass an absolute path here.
 
 ```cfm
 <cfif not directoryExists(dataDir)>
