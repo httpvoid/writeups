@@ -263,7 +263,7 @@ Once we have our ZIP archive on the filesystem, we can utilize **zip://** in the
 
 Apple prompty fixed the issue but requested us to not disclose the issue before they make some other changes. Apple rewarded us with a total of $50,000 bounty for these issues. 
 
-On the other hand, we and Apple also talked with Lucee. The Lucee team has also fixed the bug by restricting access to cfm files directly, here's the [commit link](https://github.com/lucee/Lucee/commit/6208ab7c44c61d26c79e0b0af10382899f57e1ca). We're still awaiting on CVE allocation though.
+On the other hand, we and Apple also talked with Lucee. The Lucee team has also fixed the bug by restricting access to cfm files directly, here's the [commit link](https://github.com/lucee/Lucee/commit/6208ab7c44c61d26c79e0b0af10382899f57e1ca). This is now assigned with [CVE-2021-21307](https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2021-21307), Lucee has also published a [Github Security Advisory](https://github.com/lucee/Lucee/security/advisories/GHSA-2xvv-723c-8p7r).
 
 Huge shoutout to Apple Product Security Team for being transparent & allowing the disclosure of this writeup!
 
