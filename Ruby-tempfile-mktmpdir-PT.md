@@ -6,7 +6,7 @@ While playing around Ruby we noticed that Ruby's Tempfile/mktmpdir were allowing
 
 ### CVE-2018-6914 Patch analysis
 
-A similar issue was previously reported by @oooooo_q for Linux, where `/` could be used which made path traversal possible on both Linux and Windows. We looked at the patch of this bug, which was relatively straight forward, delete `/` (File::SEPARATOR) and `\` (File::ALT_SEPARATOR, set on windows only) from the input before creating the file.
+A similar issue was previously reported by [@ooooooo_q](https://twitter.com/ooooooo_q) for Linux, where `/` could be used which made path traversal possible on both Linux and Windows. We looked at the patch of this bug, which was relatively straight forward, delete `/` (File::SEPARATOR) and `\` (File::ALT_SEPARATOR, set on windows only) from the input before creating the file.
 
 ```patch
 --- lib/tmpdir.rb
