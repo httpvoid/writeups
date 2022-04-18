@@ -1,10 +1,8 @@
-### About HTTPVoid Research
-<hr>
+## About HTTPVoid Research
 
 ....
 
-### Blogs
-<hr>
+## Blogs
 <div class="posts">
   {% for post in site.posts %}
     <article class="post">
