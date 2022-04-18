@@ -1,1 +1,113 @@
-theme: minima
+title: HTTPVoid
+
+author: httpvoid
+
+
+navbar-links:
+  About Me: "aboutme"
+  Resources:
+    - Beautiful Jekyll: "https://beautifuljekyll.com"
+    - Learn markdown: "https://www.markdowntutorial.com/"
+  Author's home: "https://deanattali.com"
+
+
+avatar: "https://pbs.twimg.com/profile_images/1488224074107355136/_vzAhUyw.jpg"
+
+round-avatar: true
+
+
+
+
+social-network-links:
+  rss: true  # remove this line if you don't want to show an RSS link at the bottom
+  github: httpvoid
+  twitter: httpvoid0x2f
+  youtube: c/HTTPVoid
+
+rss-description: HTTPVoid Blog Feed
+
+
+url-pretty: "httpvoid.com"
+
+excerpt_length: 50
+
+feed_show_excerpt: true
+
+feed_show_tags: true
+
+post_search: true
+
+
+
+
+navbar-col: "#EAEAEA"
+navbar-text-col: "#404040"
+navbar-border-col: "#DDDDDD"
+page-col: "#FFFFFF"
+text-col: "#404040"
+link-col: "#008AFF"
+hover-col: "#0085A1"
+footer-col: "#EAEAEA"
+footer-text-col: "#777777"
+footer-link-col: "#404040"
+footer-hover-col: "#0085A1"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+date_format: "%B %-d, %Y"
+
+
+
+markdown: kramdown
+highlighter: rouge
+permalink: /:year-:month-:day-:title/
+paginate: 5
+
+kramdown:
+  input: GFM
+
+defaults:
+  -
+    scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+      comments: false  # add comments to all blog posts
+      social-share: false # add social media sharing buttons to all blog posts
+  -
+    scope:
+      path: "" # any file that's not a post will be a "page" layout by default
+    values:
+      layout: "page"
+
+exclude:
+  - CHANGELOG.md
+  - CNAME
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE
+  - README.md
+  - screenshot.png
+  - docs/
+
+plugins:
+  - jekyll-paginate
+  - jekyll-sitemap
